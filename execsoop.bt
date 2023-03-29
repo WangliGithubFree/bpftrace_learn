@@ -1,0 +1,26 @@
+#!/bin/bpftrace
+
+BEGIN
+{
+        printf("%-10s %-5s %s\n", "TIME(ms)", "PID", "ARGS");
+}
+
+tracepoint:syscalls:sys_enter_execve
+{
+        printf("%-10u %-5d", elapsed / 1000000, pid);
+        join(args->argv);
+}
+
+
+
+/*功能：打印进程创建信息*/
+/*elapsed : 从bpftrace脚本启动开始计时，单位ns*/
+/*测试结果*/
+/*
+Attaching 2 probes...
+TIME(ms)   PID   ARGS
+2849       2550 ls
+8915       2551 ls
+9307       2552 ls
+9641       2553 ls
+*/
