@@ -1,0 +1,10 @@
+#!/bin/bpftrace
+#include<linux/netdevice.h>
+
+kprobe:stmmac_open
+{
+        $addr = (struct net_device *)arg0;
+        printf("name : %s\n", ((struct net_device *)arg0)->name);
+        printf("name : %d\n", $addr->mtu);
+        printf("name : %s\n", ksym((struct net_device *)arg0));
+}
